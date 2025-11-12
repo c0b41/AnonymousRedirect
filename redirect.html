@@ -11,7 +11,6 @@
     <meta name="referrer" content="never" />
 
     <style>
-        /* Define color variables for easy theme switching */
         :root {
             --background-color: #ffffff;
             --text-color: #4d4d4d;
@@ -21,12 +20,11 @@
             --button-hover-color: #58a273;
         }
 
-        /* Dark Theme overrides using prefers-color-scheme */
         @media (prefers-color-scheme: dark) {
             :root {
                 --background-color: #1a1a1a;
                 --text-color: #c9c9c9;
-                --link-color: #8cce9f; /* Slightly lighter green for contrast */
+                --link-color: #8cce9f;
                 --code-background: #2d2d2d;
             }
         }
@@ -39,7 +37,7 @@
             line-height: 1.428571429;
             color: var(--text-color);
             background-color: var(--background-color);
-            transition: background-color 0.3s, color 0.3s; /* Smooth transition */
+            transition: background-color 0.3s, color 0.3s;
         }
 
         .main {
@@ -61,7 +59,6 @@
         code {
             display: block;
             word-break: break-word;
-            /* Added dark theme styling for code block */
             background-color: var(--code-background);
             color: var(--link-color);
             padding: 10px;
@@ -85,7 +82,7 @@
             text-transform: uppercase;
             text-decoration: none;
             white-space: nowrap;
-            color: #fff; /* Keep button text white in both themes */
+            color: #fff;
             background-color: var(--button-color);
             border-radius: 8px;
             border: none;
@@ -170,44 +167,37 @@
             return decodeURIComponent(results[2].replace(/\+/g, " "));
         }
 
-        function getHostname(url) {
-            if (!url) {
-                return '';
-            }
-
-            var hostname = '';
-
-            if (url.indexOf('//') > -1) {
-                hostname = url.split('/')[2];
+        function performRedirect(url) {
+            if (url) {
+                window.location.href = url;
             } else {
-                hostname = url.split('/')[0];
+                window.location.href = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
             }
-
-            hostname = hostname.split(':')[0];
-            hostname = hostname.split('?')[0];
-
-            return hostname;
         }
 
         var url = getParameterByName('url');
-
+        var auto = getParameterByName('auto');
         var currentUrl = document.getElementById('currentUrl');
 
         if (currentUrl) {
-            currentUrl.innerText = url || 'URL parameter "url" is missing.';
+            currentUrl.innerText = url || 'No URL provided';
         }
 
-        function performRedirect() {
-            // Rick-rolling in case of wrong URL
-            window.location.href = url || 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
+        if (auto && url) {
+            setTimeout(function() {
+                performRedirect(url);
+            }, 3000);
         }
 
         var redirectButton = document.getElementById('redirectButton');
 
         if (redirectButton) {
-            redirectButton.addEventListener('click', performRedirect);
+            redirectButton.addEventListener('click', function() {
+                performRedirect(url || 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'); // Redirect to URL or fallback URL
+            });
             redirectButton.focus();
         }
     </script>
+    
 </body>
 </html>
